@@ -11,18 +11,15 @@ def knn_main(training_data, test_data, k):
     wrong = 0
     row = 0
 
-    # Normalize Data Sets
-    mean_array = np.mean(training_data, axis=1, dtype=float)
-    std_array = np.std(training_data, axis=1, dtype=float)
 
     # Loop through each row of test Data
     for data in test_data:
         # Call Helper function to process each row
-        results = knn(training_data, data, k, mean_array, std_array, row )
+        results = knn(training_data, data, k)
         row += 1
 
         # Accumulate results, if results equal answer
-        if (results == data[0]):
+        if (results == int(data[0])):
             correct += 1
         else:
             wrong += 1
@@ -32,12 +29,9 @@ def knn_main(training_data, test_data, k):
 
 
 # Helper function to process each row
-def knn(training_data, data, k, mean_array, std_array, row):
+def knn(training_data, data, k):
     #Accumulator of each row
     distance = []
-    # distance = np.array();
-
-
 
     # Cycle through data and calculate distance  28 x 28 features
     for test_case in training_data:
@@ -46,13 +40,9 @@ def knn(training_data, data, k, mean_array, std_array, row):
         dist = 0.0
         for i in range(1, len(test_case)):
 
-            # Normalize Data
-            X1 =(test_case[i] - mean_array[row]) / std_array[row]
-            X2 = (data[i] - mean_array[row]) / std_array[row]
 
             # Distance formula
-            dist += ( X1 - X2 )**2
-            # dist += (test_data[i] - data[i])**2   # Distance without Normalization
+            dist += (test_case[i]  - data[i])**2   # Distance without Normalization
         dist = np.math.sqrt(dist)
 
 
@@ -74,18 +64,17 @@ def knn(training_data, data, k, mean_array, std_array, row):
 
 
 
-
+#  Main Start Program HERE
 training_data = np.genfromtxt('MNIST_training.csv', delimiter=',', skip_header=1)
 test_data = np.genfromtxt('MNIST_test.csv', delimiter=',', skip_header=1)
 
 
 # Call Main Driving Function
 results = knn_main(training_data, test_data, 7)
-print(results)
+print("Accuracy is ", results)
 
 
-#
-#
+
 # #
 # # Find optimal K
 # find_k_array =  np.array(0)
